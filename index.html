@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ISIMO — Creative Agency & Production Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,700;0,800;0,900;1,300;1,700;1,900&family=Space+Mono:wght@400;700&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:  #060606;
+    --white:  #EDEAE5;
+    --grey:   #111111;
+    --mid:    #1E1E1E;
+    --dim:    rgba(237,234,229,0.32);
+    --gold:   #C8A96E;
+    --mono:  'Space Mono', monospace;
+    --disp:  'Barlow Condensed', sans-serif;
+    --body:  'Barlow', sans-serif;
+  }
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--body);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CURSOR */
+  #cur  { position:fixed; width:5px; height:5px; background:var(--white); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:transform .1s; }
+  #cur2 { position:fixed; width:26px; height:26px; border:1px solid rgba(237,234,229,.2); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:all .18s ease; }
+
+  /* NAV */
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:22px 48px;
+    background:linear-gradient(to bottom, rgba(6,6,6,.9) 0%, transparent 100%);
+    backdrop-filter: blur(0px);
+  }
+  .nav-logo { display:flex; align-items:center; }
+  .nav-logo img { height:18px; width:auto; filter:brightness(0) invert(1); }
+  .nav-links { display:flex; gap:32px; list-style:none; }
+  .nav-links a {
+    font-family:var(--mono); font-size:9px; letter-spacing:.12em;
+    text-transform:uppercase; color:rgba(237,234,229,.4);
+    text-decoration:none; transition:color .2s;
+  }
+  .nav-links a:hover { color:var(--white); }
+
+  /* HERO */
+  .hero {
+    min-height:100vh; display:flex; flex-direction:column;
+    justify-content:flex-end; padding:0 48px 64px; position:relative;
+    overflow:hidden;
+  }
+  .hero-video {
+    position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+  }
+  .hero-video iframe {
+    position:absolute; top:50%; left:50%;
+    width:177.78vh; min-width:100%; height:56.25vw; min-height:100%;
+    transform:translate(-50%,-50%);
+    border:none; pointer-events:none; opacity:.7;
+  }
+  .hero-video::after {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(to bottom, rgba(6,6,6,.4) 0%, rgba(6,6,6,.7) 60%, rgba(6,6,6,.98) 100%);
+    z-index:1;
+  }
+  .hero > *:not(.hero-video) { position:relative; z-index:2; }
+  .hero-tag {
+    font-family:var(--mono); font-size:9px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--dim); margin-bottom:22px;
+    opacity:0; animation:up .7s .2s forwards;
+  }
+  .hero-title {
+    font-family:var(--disp); font-weight:900;
+    font-size:clamp(68px, 11vw, 164px);
+    line-height:.87; text-transform:uppercase; letter-spacing:-.025em;
+    opacity:0; animation:up .8s .35s forwards;
+  }
+  .hero-title em { font-style:italic; font-weight:300; }
+  .hero-foot {
+    display:flex; justify-content:space-between; align-items:flex-end;
+    margin-top:44px; opacity:0; animation:up .7s .55s forwards;
+  }
+  .hero-desc {
+    font-family:var(--body); font-weight:300; font-size:13px;
+    line-height:1.9; color:var(--dim); max-width:280px;
+  }
+  .hero-meta {
+    font-family:var(--mono); font-size:9px; letter-spacing:.1em;
+    text-transform:uppercase; color:rgba(237,234,229,.16);
+    text-align:right; line-height:2.1;
+  }
+
+  /* MARQUEE */
+  .mq { border-top:1px solid var(--mid); border-bottom:1px solid var(--mid); overflow:hidden; padding:12px 0; }
+  .mq-track { display:flex; white-space:nowrap; animation:scroll 36s linear infinite; }
+  .mq-item {
+    font-family:var(--disp); font-weight:700; font-size:11px;
+    letter-spacing:.24em; text-transform:uppercase; padding:0 48px;
+    color:rgba(237,234,229,.13); flex-shrink:0;
+  }
+  .mq-item span { color:rgba(237,234,229,.06); margin-right:48px; }
+
+  /* SECTION HEAD */
+  .sh {
+    display:flex; justify-content:space-between; align-items:flex-end;
+    padding:72px 48px 36px; border-bottom:1px solid var(--mid);
+  }
+  .sh-num { font-family:var(--mono); font-size:9px; color:var(--dim); letter-spacing:.1em; margin-bottom:10px; }
+  .sh-title {
+    font-family:var(--disp); font-weight:900;
+    font-size:clamp(44px,6vw,84px);
+    text-transform:uppercase; line-height:.94; letter-spacing:-.015em;
+  }
+  .sh-label {
+    font-family:var(--mono); font-size:9px;
+    color:rgba(237,234,229,.2); letter-spacing:.1em;
+    text-transform:uppercase; text-align:right; line-height:2;
+  }
+
+  /* BRAND SECTION DIVIDER */
+  .brand-divider {
+    padding: 28px 48px 0;
+    border-top: 1px solid var(--mid);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .brand-divider-name {
+    font-family: var(--disp); font-weight: 900; font-size: 11px;
+    letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold); white-space: nowrap;
+  }
+  .brand-divider-line {
+    flex: 1; height: 1px; background: var(--mid);
+  }
+  .brand-divider-tag {
+    font-family: var(--mono); font-size: 8px; letter-spacing: .12em;
+    text-transform: uppercase; color: rgba(237,234,229,.18); white-space: nowrap;
+  }
+
+  /* CARD BASE */
+  .gw { padding:0 48px; }
+  .card {
+    position:relative; overflow:hidden; display:block;
+    text-decoration:none; color:inherit; cursor:pointer;
+  }
+  .card video {
+    width:100%; height:100%; object-fit:cover; display:block;
+    filter:brightness(.68);
+    transition:transform .8s cubic-bezier(.25,.46,.45,.94), filter .5s;
+    pointer-events: none;
+  }
+  .card img {
+    width:100%; height:100%; object-fit:cover; display:block;
+    filter:brightness(.68);
+    transition:transform .8s cubic-bezier(.25,.46,.45,.94), filter .5s;
+  }
+  .card:hover img,
+  .card:hover video { transform:scale(1.04); filter:brightness(.42); }
+  .ci {
+    position:absolute; bottom:0; left:0; right:0; padding:30px 36px;
+    background:linear-gradient(to top, rgba(6,6,6,.9) 0%, transparent 100%);
+    z-index: 2;
+  }
+  .cc {
+    font-family:var(--mono); font-size:9px; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--dim); margin-bottom:6px;
+  }
+  .cn {
+    font-family:var(--disp); font-weight:900; text-transform:uppercase;
+    letter-spacing:-.02em; line-height:.88;
+  }
+  .ct {
+    font-family:var(--mono); font-size:8px; color:rgba(237,234,229,.3);
+    letter-spacing:.1em; text-transform:uppercase; line-height:2; margin-top:7px;
+  }
+  .cy {
+    position:absolute; top:18px; right:20px; z-index:2;
+    font-family:var(--mono); font-size:9px;
+    color:rgba(237,234,229,.2); letter-spacing:.08em;
+  }
+  .cpill {
+    position:absolute; top:18px; left:20px; z-index:2;
+    background:rgba(237,234,229,.07); border:1px solid rgba(237,234,229,.1);
+    font-family:var(--mono); font-size:8px; font-weight:700;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--white);
+    padding:3px 9px; border-radius:2px;
+  }
+  .cpill.gold {
+    background: rgba(200,169,110,.12); border-color: rgba(200,169,110,.3);
+    color: var(--gold);
+  }
+
+  /* THUMBNAIL via background-image */
+  .card-bg {
+    position:absolute; inset:0; background-size:cover; background-position:center;
+    filter:brightness(.6); transition:transform .8s cubic-bezier(.25,.46,.45,.94), filter .5s;
+    z-index:0;
+  }
+  .card:hover .card-bg { transform:scale(1.04); filter:brightness(.32); }
+
+  /* PLAY ICON overlay */
+  .play-overlay {
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    z-index:3; opacity:0; transition:opacity .3s;
+    pointer-events: none;
+  }
+  .card:hover .play-overlay { opacity:1; }
+  .play-icon {
+    width:64px; height:64px; border:1px solid rgba(237,234,229,.55); border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:20px; color:rgba(237,234,229,.95);
+    background:rgba(6,6,6,.35); backdrop-filter:blur(6px);
+  }
+  /* badge VIDEO en cards */
+  .video-badge {
+    position:absolute; top:18px; right:20px; z-index:4;
+    font-family:var(--mono); font-size:8px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--gold);
+    background:rgba(6,6,6,.75); border:1px solid rgba(200,169,110,.3);
+    padding:3px 10px; border-radius:2px;
+  }
+
+  /* CARD SIZES */
+  .c-hero { height:88vh; border-bottom:1px solid var(--mid); }
+  .c-hero .cn { font-size:clamp(52px,8.5vw,116px); }
+  .c-land { aspect-ratio:21/9; border-bottom:1px solid var(--mid); }
+  .c-land .cn { font-size:clamp(34px,5vw,64px); }
+  .c-tall { aspect-ratio:3/4; }
+  .c-tall .cn { font-size:clamp(26px,3.5vw,46px); }
+  .c-sq   { aspect-ratio:1/1; }
+  .c-sq .cn   { font-size:clamp(24px,3vw,40px); }
+  .c-wide { aspect-ratio:16/7; border-bottom:1px solid var(--mid); }
+  .c-wide .cn { font-size:clamp(34px,5vw,64px); }
+
+  /* ROWS */
+  .r2 { display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid var(--mid); }
+  .r2 .card { border-right:1px solid var(--mid); }
+  .r2 .card:last-child { border-right:none; }
+
+  .r3 { display:grid; grid-template-columns:1fr 1fr 1fr; border-bottom:1px solid var(--mid); }
+  .r3 .card { border-right:1px solid var(--mid); }
+  .r3 .card:last-child { border-right:none; }
+
+  .r4 { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; border-bottom:1px solid var(--mid); }
+  .r4 .card { border-right:1px solid var(--mid); }
+  .r4 .card:last-child { border-right:none; }
+
+  .ra { display:grid; grid-template-columns:2fr 1fr; border-bottom:1px solid var(--mid); }
+  .ra.rv { grid-template-columns:1fr 2fr; }
+  .ra .card { border-right:1px solid var(--mid); }
+  .ra .card:last-child { border-right:none; }
+  .ra > .card:first-child { aspect-ratio:16/10; }
+  .ra > .card:last-child  { min-height:380px; }
+
+  /* TEXT CARD */
+  .tc {
+    padding:52px 48px; border-bottom:1px solid var(--mid);
+    background:var(--grey); display:flex;
+    justify-content:space-between; align-items:center; gap:40px;
+    cursor:pointer; text-decoration:none; color:inherit; transition:background .25s;
+  }
+  .tc:hover { background:#161616; }
+  .tc .cc { color:var(--dim); margin-bottom:10px; }
+  .tc .cn { font-family:var(--disp); font-weight:900; font-size:clamp(36px,5vw,68px); text-transform:uppercase; line-height:.9; letter-spacing:-.02em; }
+  .tc-r { font-family:var(--mono); font-size:9px; color:rgba(237,234,229,.22); letter-spacing:.1em; text-transform:uppercase; line-height:2.2; text-align:right; flex-shrink:0; }
+
+  /* VIDEO GRID — cards con thumbnail */
+  .vg {
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(280px,1fr));
+    gap:1px; background:var(--mid);
+  }
+  .vi {
+    position:relative; overflow:hidden; display:block;
+    text-decoration:none; color:inherit; cursor:pointer;
+    aspect-ratio:16/9; background:var(--grey);
+  }
+  .vi .vi-bg {
+    position:absolute; inset:0; background-size:cover; background-position:center;
+    filter:brightness(.55); transition:transform .7s ease, filter .4s;
+  }
+  .vi:hover .vi-bg { transform:scale(1.05); filter:brightness(.3); }
+  .vi .vi-info {
+    position:absolute; inset:0; display:flex; flex-direction:column;
+    justify-content:flex-end; padding:20px 22px;
+    background:linear-gradient(to top, rgba(6,6,6,.9) 0%, transparent 60%);
+    z-index:2;
+  }
+  .vi-num { display:none; }
+  .vi-brand { font-family:var(--mono); font-size:8px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin-bottom:4px; }
+  .vi-title { font-family:var(--disp); font-weight:900; font-size:clamp(16px,2vw,22px); text-transform:uppercase; letter-spacing:.01em; line-height:1; }
+  .vi-meta { display:none; }
+  .vi-arr { font-family:var(--mono); font-size:8px; color:rgba(237,234,229,.3); letter-spacing:.1em; margin-top:6px; transition:color .2s; }
+  .vi:hover .vi-arr { color:var(--gold); }
+  .vi .vi-play {
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:44px; height:44px; border:1px solid rgba(237,234,229,.4); border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:14px; color:rgba(237,234,229,.8);
+    background:rgba(6,6,6,.3); backdrop-filter:blur(4px);
+    z-index:3; opacity:0; transition:opacity .3s;
+  }
+  .vi:hover .vi-play { opacity:1; }
+
+  /* PHOTOS GRID */
+  .pg {
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(280px,1fr));
+    gap:1px; background:var(--mid);
+    border-bottom:1px solid var(--mid);
+  }
+  .pg a {
+    display:block; aspect-ratio:3/4; overflow:hidden;
+    text-decoration:none; cursor:pointer; position:relative;
+    background: #0a0a0a;
+  }
+  .pg a img { width:100%; height:100%; object-fit:cover; display:block; filter:brightness(.75); transition:transform .6s ease, filter .4s; }
+  .pg a:hover img { transform:scale(1.06); filter:brightness(.5); }
+  .pg-label {
+    position:absolute; bottom:0; left:0; right:0; padding:20px 22px;
+    background:linear-gradient(to top, rgba(6,6,6,.85) 0%, transparent 100%);
+    font-family:var(--mono); font-size:8px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--dim);
+  }
+  .pg-brand {
+    position:absolute; top:14px; left:16px;
+    font-family:var(--mono); font-size:8px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--gold);
+    background: rgba(6,6,6,.6); padding:3px 8px;
+  }
+
+  /* IMAGE placeholder while loading */
+  .img-placeholder {
+    width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+    font-family:var(--disp); font-weight:900; font-size:56px; letter-spacing:-.04em;
+    color:rgba(237,234,229,.04); text-transform:uppercase;
+    background:linear-gradient(150deg,#0A0A0A,#141008);
+    position:absolute; inset:0;
+  }
+
+  /* CGI CARDS */
+  .cgi-grid {
+    display:grid; grid-template-columns: repeat(auto-fill,minmax(340px,1fr));
+    gap:1px; background:var(--mid); border-bottom:1px solid var(--mid);
+  }
+  .cgi-card {
+    background:var(--grey); position:relative; overflow:hidden;
+    aspect-ratio:16/9; display:block; text-decoration:none; color:inherit;
+  }
+  .cgi-card video, .cgi-card img {
+    width:100%; height:100%; object-fit:cover; filter:brightness(.6);
+    transition:transform .8s ease, filter .5s;
+  }
+  .cgi-card:hover video, .cgi-card:hover img { transform:scale(1.05); filter:brightness(.35); }
+  .cgi-card .ci { background:linear-gradient(to top, rgba(6,6,6,.95) 0%, transparent 100%); }
+
+  /* ABOUT */
+  .ab { display:grid; grid-template-columns:1fr 1fr; gap:72px; padding:88px 48px; border-bottom:1px solid var(--mid); }
+  .ab-stmt { font-family:var(--disp); font-weight:900; font-size:clamp(28px,3.8vw,50px); text-transform:uppercase; line-height:1.03; letter-spacing:-.01em; margin-bottom:32px; }
+  .ab-stmt em { font-style:italic; font-weight:300; }
+  .ab-body { font-family:var(--body); font-weight:300; font-size:13px; line-height:1.9; color:var(--dim); max-width:400px; }
+  .svl { list-style:none; }
+  .svl li { display:flex; justify-content:space-between; align-items:center; padding:16px 0; border-bottom:1px solid var(--mid); font-family:var(--disp); font-weight:600; font-size:16px; text-transform:uppercase; letter-spacing:.04em; transition:color .2s; }
+  .svl li:hover { color:rgba(237,234,229,.6); }
+  .svl li span { font-family:var(--mono); font-size:8px; color:rgba(237,234,229,.22); letter-spacing:.1em; text-transform:uppercase; }
+
+  /* FOOTER */
+  footer { padding:64px 48px 48px; display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:36px; border-top:1px solid var(--mid); }
+  .fl { font-family:var(--disp); font-weight:900; font-size:clamp(56px,8.5vw,120px); text-transform:uppercase; line-height:.88; letter-spacing:-.025em; color:rgba(237,234,229,.05); }
+  .fr { text-align:right; }
+  .fr-lbl { font-family:var(--mono); font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin-bottom:14px; }
+  .fr a { display:block; font-family:var(--disp); font-weight:600; font-size:16px; text-transform:uppercase; letter-spacing:.04em; color:var(--white); text-decoration:none; transition:color .2s; line-height:1.9; }
+  .fr a:hover { color:rgba(237,234,229,.45); }
+  .fb { width:100%; display:flex; justify-content:space-between; align-items:center; padding-top:28px; border-top:1px solid var(--mid); font-family:var(--mono); font-size:8px; color:rgba(237,234,229,.16); letter-spacing:.1em; text-transform:uppercase; }
+
+  /* BG placeholders */
+  .bg1 { background:linear-gradient(150deg,#0A0A0A,#141008,#1E1800); }
+  .bg2 { background:linear-gradient(150deg,#0A080C,#160E20,#1A0F28); }
+  .bg3 { background:linear-gradient(150deg,#0C0A08,#1A1412,#221A14); }
+  .bg4 { background:linear-gradient(150deg,#080C0A,#0E1A12,#121E16); }
+  .bg5 { background:linear-gradient(150deg,#0C0808,#1A0E0E,#221414); }
+  .bg6 { background:linear-gradient(150deg,#080808,#121212,#181818); }
+  .bg7 { background:linear-gradient(150deg,#080A0C,#0E1216,#121820); }
+  .ph { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:var(--disp); font-weight:900; font-size:88px; letter-spacing:-.04em; color:rgba(237,234,229,.04); text-transform:uppercase; user-select:none; line-height:1; }
+
+  /* UTILS */
+  .reveal { opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.in { opacity:1; transform:translateY(0); }
+  @keyframes up     { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes scroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  /* LIGHTBOX */
+  #lb { display:none; position:fixed; inset:0; background:rgba(6,6,6,.97); z-index:9999; align-items:center; justify-content:center; flex-direction:column; }
+  #lb.open { display:flex; }
+  #lb-close { position:absolute; top:24px; right:32px; font-family:var(--mono); font-size:10px; letter-spacing:.2em; color:rgba(237,234,229,.4); cursor:pointer; text-transform:uppercase; transition:color .2s; }
+  #lb-close:hover { color:var(--white); }
+  #lb-inner { max-width:90vw; max-height:86vh; display:flex; align-items:center; justify-content:center; }
+  #lb-inner video { max-width:90vw; max-height:80vh; outline:none; }
+  #lb-inner img { max-width:90vw; max-height:80vh; object-fit:contain; }
+  #lb-caption { margin-top:18px; font-family:var(--mono); font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:rgba(237,234,229,.3); text-align:center; }
+
+  /* NAV active state */
+  nav.scrolled { background:rgba(6,6,6,.95); backdrop-filter:blur(12px); }
+</style>
+</head>
+<body>
+
+<!-- LIGHTBOX -->
+<div id="lb">
+  <div id="lb-close" onclick="closeLB()">Cerrar ✕</div>
+  <div id="lb-inner"></div>
+  <div id="lb-caption"></div>
+</div>
+
+<div id="cur"></div>
+<div id="cur2"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="https://isimo.us/es" target="_blank" class="nav-logo">
+    <img src="https://isimo.us/images/ISIMOLogoSolo.png" alt="ISIMO">
+  </a>
+  <ul class="nav-links">
+    <li><a href="#work">Campañas</a></li>
+    <li><a href="#videos">Videos</a></li>
+    <li><a href="#cgi">CGI 3D</a></li>
+    <li><a href="#fotos">Fotografía</a></li>
+    <li><a href="#about">✦ AI Lab</a></li>
+    <li><a href="#contact">Estudio</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-video">
+    <iframe src="https://drive.google.com/file/d/1qOfGo5d5SZpPh28cXuVf0t7ftQVPEgby/preview"
+      allow="autoplay" allowfullscreen tabindex="-1" aria-hidden="true"></iframe>
+  </div>
+  <p class="hero-tag">Buenos Aires · Worldwide · AI · CGI · Campaign Production</p>
+  <h1 class="hero-title">Creative<br>Agency &amp;<br><em>Production</em><br>Studio.</h1>
+  <div class="hero-foot">
+    <p class="hero-desc">AI imagery · CGI · 3D motion<br>Campaign production · Branding<br>Fashion · Beauty · Advertising</p>
+    <div class="hero-meta">Campaign Visuals<br>CGI · Motion<br>AI Production<br>Brand Systems</div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="mq">
+  <div class="mq-track">
+    <span class="mq-item">Campaign Work <span>✦</span></span>
+    <span class="mq-item">Product Worlds <span>✦</span></span>
+    <span class="mq-item">CGI · Motion <span>✦</span></span>
+    <span class="mq-item">Virtual Talent <span>✦</span></span>
+    <span class="mq-item">AI Production <span>✦</span></span>
+    <span class="mq-item">Brand Systems <span>✦</span></span>
+    <span class="mq-item">Art Direction <span>✦</span></span>
+    <span class="mq-item">Campaign Work <span>✦</span></span>
+    <span class="mq-item">Product Worlds <span>✦</span></span>
+    <span class="mq-item">CGI · Motion <span>✦</span></span>
+    <span class="mq-item">Virtual Talent <span>✦</span></span>
+    <span class="mq-item">AI Production <span>✦</span></span>
+    <span class="mq-item">Brand Systems <span>✦</span></span>
+    <span class="mq-item">Art Direction <span>✦</span></span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     01 — CAMPAIGN WORK
+═══════════════════════════════ -->
+<div id="work">
+  <div class="sh reveal">
+    <div>
+      <div class="sh-num">01 — Campaign Work</div>
+      <h2 class="sh-title">Selected<br>Work</h2>
+    </div>
+    <div class="sh-label">Fashion · Beauty<br>Advertising · CGI<br>Brand Systems</div>
+  </div>
+
+  <div class="gw">
+
+    <!-- HERO: JAZMÍN CHEBAR — video principal -->
+    <a href="#" onclick="openVideo('1YjJub1od7TbA9OwS93e5bJYO8gTGO9u2','Jazmín Chebar — Video Campaign 2026'); return false;"
+       class="card c-hero reveal">
+      <div class="card-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1YjJub1od7TbA9OwS93e5bJYO8gTGO9u2&sz=w1200')"></div>
+      <div class="video-badge">▶ VIDEO</div>
+      <span class="cpill">Fashion Campaign</span>
+      <div class="play-overlay"><div class="play-icon">▶</div></div>
+      <div class="ci">
+        <div class="cc">Jazmín Chebar</div>
+        <div class="cn">Campaign<br>Production</div>
+        <div class="ct">Beauty · AI Production · Motion · Brand Systems</div>
+      </div>
+    </a>
+
+    <!-- ROW 2: BOWEN + VULK Hypereal -->
+    <div class="r2 reveal">
+      <a href="#" onclick="openVideo('1ViIiTmO_mHlTlO76Ltezj8yvKDoym9gm','Bowen — Extended Version 2026'); return false;"
+         class="card c-tall">
+        <div class="card-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1ViIiTmO_mHlTlO76Ltezj8yvKDoym9gm&sz=w800')"></div>
+        <div class="video-badge">▶ VIDEO</div>
+        <span class="cpill">Fashion Campaign</span>
+        <div class="play-overlay"><div class="play-icon">▶</div></div>
+        <div class="ci">
+          <div class="cc">BOWEN</div>
+          <div class="cn">Product<br>Campaign</div>
+          <div class="ct">Creative Direction · Product World · Motion</div>
+        </div>
+      </a>
+      <a href="#" onclick="openVideo('18ICkYApKjyatAmUkkMgIlu41QHICUyUi','VULK — Hypereal 1'); return false;"
+         class="card c-tall">
+        <div class="card-bg" style="background-image:url('https://drive.google.com/thumbnail?id=18ICkYApKjyatAmUkkMgIlu41QHICUyUi&sz=w800')"></div>
+        <div class="video-badge">▶ VIDEO</div>
+        <span class="cpill gold">CGI · Hypereal Series</span>
+        <div class="play-overlay"><div class="play-icon">▶</div></div>
+        <div class="ci">
+          <div class="cc">VULK</div>
+          <div class="cn">Hypereal<br>Series</div>
+          <div class="ct">CGI · Product · Motion Design</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- LANDSCAPE: LINEDITO Fragrance -->
+    <a href="#" onclick="openVideo('1aevHK-7r1FNY_xmnsyxr7Cucbk14N7yQ','Linedito — Dolcezza Horizontal'); return false;"
+       class="card c-land reveal">
+      <div class="card-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1aevHK-7r1FNY_xmnsyxr7Cucbk14N7yQ&sz=w1200')"></div>
+      <div class="video-badge">▶ VIDEO</div>
+      <span class="cpill gold">Perfumería · CGI</span>
+      <div class="play-overlay"><div class="play-icon">▶</div></div>
+      <div class="ci">
+        <div class="cc">Linedito</div>
+        <div class="cn">Perfume<br>Campaign</div>
+        <div class="ct">AI Production · Product World · Visual Development · CGI</div>
+      </div>
+    </a>
+
+    <!-- CARD: MARIA CHER IA -->
+    <a href="#" onclick="openVideo('1SF_HqSAZK9OgB2V_QYL5WnAT1YOfWVNw','María Cher — IA HQ'); return false;"
+       class="card c-land reveal">
+      <div class="card-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1SF_HqSAZK9OgB2V_QYL5WnAT1YOfWVNw&sz=w1200')"></div>
+      <div class="video-badge">▶ VIDEO</div>
+      <span class="cpill gold">AI Production</span>
+      <div class="play-overlay"><div class="play-icon">▶</div></div>
+      <div class="ci">
+        <div class="cc">María Cher</div>
+        <div class="cn">AI Campaign</div>
+        <div class="ct">AI Imagery · Fashion Production · 2026</div>
+      </div>
+    </a>
+
+    <!-- ASYM: PIXORY Spring + 47 Street -->
+    <div class="ra rv reveal">
+      <a href="#" onclick="openVideo('1i3aoJmX8UYjLff39R1q5EFQ6Aem-9I42','Pixory — Spring'); return false;"
+         class="card">
+        <div class="card-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1i3aoJmX8UYjLff39R1q5EFQ6Aem-9I42&sz=w800')"></div>
+        <div class="video-badge">▶ VIDEO</div>
+        <span class="cpill gold">CGI · Spring Series</span>
+        <div class="play-overlay"><div class="play-icon">▶</div></div>
+        <div class="ci">
+          <div class="cc">Pixory</div>
+          <div class="cn">CGI Spring<br>Series</div>
+          <div class="ct">Video Hero · Cutdowns · Motion</div>
+        </div>
+      </a>
+      <a href="#" onclick="openVideo('1qQmHwcCVqe7csQ7SUBonwAtcmdwL4hDp','47 Street — Conformado Final 03'); return false;"
+         class="card">
+        <div class="card-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1qQmHwcCVqe7csQ7SUBonwAtcmdwL4hDp&sz=w800')"></div>
+        <div class="video-badge">▶ VIDEO</div>
+        <div class="play-overlay"><div class="play-icon">▶</div></div>
+        <div class="ci">
+          <div class="cc">47 Street</div>
+          <div class="cn">Campaign<br>Final</div>
+          <div class="ct">Visual Direction · Production · Final Assets</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- LANDSCAPE: OSSIRA Navidad -->
+    <a href="#" onclick="openVideo('1bvZA0hcOBRmLCLuS3LRUhOox2keoWybr','Ossira — Navidad 1'); return false;"
+       class="card c-land reveal">
+      <div class="card-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1bvZA0hcOBRmLCLuS3LRUhOox2keoWybr&sz=w1200')"></div>
+      <div class="video-badge">▶ VIDEO</div>
+      <span class="cpill">Navidad</span>
+      <div class="play-overlay"><div class="play-icon">▶</div></div>
+      <div class="ci">
+        <div class="cc">Ossira</div>
+        <div class="cn">Campaña<br>Navidad</div>
+        <div class="ct">Visual Direction · Production · Final Assets</div>
+      </div>
+    </a>
+
+    <!-- ROW 3: JCH Ladybug + Pajarito + Hush Puppies -->
+    <div class="r3 reveal">
+      <a href="#" onclick="openVideo('1Uh8im_VtGi78JhFaRgtlvaRGbMKC5rYV','Jazmín Chebar — Ladybug'); return false;"
+         class="card c-tall">
+        <div class="card-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1Uh8im_VtGi78JhFaRgtlvaRGbMKC5rYV&sz=w600')"></div>
+        <div class="video-badge">▶ VIDEO</div>
+        <div class="play-overlay"><div class="play-icon">▶</div></div>
+        <div class="ci">
+          <div class="cc">Jazmín Chebar</div>
+          <div class="cn">Ladybug<br>Campaign</div>
+        </div>
+      </a>
+      <a href="#" onclick="openVideo('1ttuDfw5HxXgXRMLM0Hdm2jWKXS9N6Cb3','María Cher — Pajarito'); return false;"
+         class="card c-tall">
+        <div class="card-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1ttuDfw5HxXgXRMLM0Hdm2jWKXS9N6Cb3&sz=w600')"></div>
+        <div class="video-badge">▶ VIDEO</div>
+        <div class="play-overlay"><div class="play-icon">▶</div></div>
+        <div class="ci">
+          <div class="cc">María Cher</div>
+          <div class="cn">Pajarito<br>Campaign</div>
+        </div>
+      </a>
+      <a href="#" onclick="openVideo('1uRyIsVKxXbk5AMw6ult1mfkvuiYV2LS2','Hush Puppies — Campaign 1'); return false;"
+         class="card c-tall">
+        <div class="card-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1uRyIsVKxXbk5AMw6ult1mfkvuiYV2LS2&sz=w600')"></div>
+        <div class="video-badge">▶ VIDEO</div>
+        <div class="play-overlay"><div class="play-icon">▶</div></div>
+        <div class="ci">
+          <div class="cc">Hush Puppies</div>
+          <div class="cn">Footwear<br>Campaign</div>
+        </div>
+      </a>
+    </div>
+
+  </div><!-- /gw -->
+</div>
+
+<!-- MARQUEE 2 — CLIENTES -->
+<div class="mq">
+  <div class="mq-track" style="animation-direction:reverse;animation-duration:24s;">
+    <span class="mq-item">Maria Cher <span>·</span></span>
+    <span class="mq-item">Jazmín Chebar <span>·</span></span>
+    <span class="mq-item">Ossira <span>·</span></span>
+    <span class="mq-item">Pixory <span>·</span></span>
+    <span class="mq-item">Bowen <span>·</span></span>
+    <span class="mq-item">47 Street <span>·</span></span>
+    <span class="mq-item">VULK <span>·</span></span>
+    <span class="mq-item">Pfizer <span>·</span></span>
+    <span class="mq-item">Linedito <span>·</span></span>
+    <span class="mq-item">Ricagno <span>·</span></span>
+    <span class="mq-item">Milka <span>·</span></span>
+    <span class="mq-item">Hush Puppies <span>·</span></span>
+    <span class="mq-item">Paula Cahen D'Anvers <span>·</span></span>
+    <span class="mq-item">Acuario <span>·</span></span>
+    <span class="mq-item">Maria Cher <span>·</span></span>
+    <span class="mq-item">Jazmín Chebar <span>·</span></span>
+    <span class="mq-item">Ossira <span>·</span></span>
+    <span class="mq-item">Pixory <span>·</span></span>
+    <span class="mq-item">Bowen <span>·</span></span>
+    <span class="mq-item">47 Street <span>·</span></span>
+    <span class="mq-item">VULK <span>·</span></span>
+    <span class="mq-item">Pfizer <span>·</span></span>
+    <span class="mq-item">Linedito <span>·</span></span>
+    <span class="mq-item">Ricagno <span>·</span></span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     02 — VIDEOS (lista completa)
+═══════════════════════════════ -->
+<div id="videos">
+  <div class="sh reveal">
+    <div>
+      <div class="sh-num">02 — Audiovisual</div>
+      <h2 class="sh-title">Video</h2>
+    </div>
+    <div class="sh-label">Campaign · CGI<br>Motion · Reels</div>
+  </div>
+
+  <!-- JAZMÍN CHEBAR -->
+  <div class="brand-divider reveal">
+    <div class="brand-divider-name">Jazmín Chebar</div>
+    <div class="brand-divider-line"></div>
+    <div class="brand-divider-tag">Fashion · Beauty · 2025–2026</div>
+  </div>
+  <div class="vg reveal">
+    <a href="#" onclick="openVideo('1YjJub1od7TbA9OwS93e5bJYO8gTGO9u2','Jazmín Chebar — Video Campaign'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1YjJub1od7TbA9OwS93e5bJYO8gTGO9u2&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Jazmín Chebar</div>
+        <div class="vi-title">Video Campaign</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1zOtWM_hcxA_TpWlGTjTi2YfR5Xl_ht1Q','Jazmín Chebar — Botella 1'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1zOtWM_hcxA_TpWlGTjTi2YfR5Xl_ht1Q&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Jazmín Chebar</div>
+        <div class="vi-title">Botella 1</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1PCrR6BWa3c9LXmCoYu7ChoTwq9Xy78Yh','Jazmín Chebar — Pouch'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1PCrR6BWa3c9LXmCoYu7ChoTwq9Xy78Yh&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Jazmín Chebar</div>
+        <div class="vi-title">Pouch</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1nZALcg7WRziKK4HhtIB0D6AfO7zkHG-D','Jazmín Chebar — Obsequios'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1nZALcg7WRziKK4HhtIB0D6AfO7zkHG-D&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Jazmín Chebar</div>
+        <div class="vi-title">Obsequios</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1Uh8im_VtGi78JhFaRgtlvaRGbMKC5rYV','Jazmín Chebar — Ladybug'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1Uh8im_VtGi78JhFaRgtlvaRGbMKC5rYV&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Jazmín Chebar</div>
+        <div class="vi-title">Ladybug</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1QjOSVBJt_lWcprG2fsj85ELV9hg9Io-9','Jazmín Chebar — Ballerina'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1QjOSVBJt_lWcprG2fsj85ELV9hg9Io-9&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Jazmín Chebar</div>
+        <div class="vi-title">Ballerina</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1nzQcSirtyBkAC7zgIoS63iicKlbj4t3y','Jazmín Chebar — Perro'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1nzQcSirtyBkAC7zgIoS63iicKlbj4t3y&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Jazmín Chebar</div>
+        <div class="vi-title">Perro</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1h4Pf1C7oX-Mw-QLCQ-iu0tMsnAf4SciT','Jazmín Chebar — Mono'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1h4Pf1C7oX-Mw-QLCQ-iu0tMsnAf4SciT&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Jazmín Chebar</div>
+        <div class="vi-title">Mono</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- VULK -->
+  <div class="brand-divider reveal">
+    <div class="brand-divider-name">VULK</div>
+    <div class="brand-divider-line"></div>
+    <div class="brand-divider-tag">Sneakers · CGI · Hypereal Series</div>
+  </div>
+  <div class="vg reveal">
+    <a href="#" onclick="openVideo('18ICkYApKjyatAmUkkMgIlu41QHICUyUi','VULK — Hypereal 1'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=18ICkYApKjyatAmUkkMgIlu41QHICUyUi&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">VULK</div>
+        <div class="vi-title">Hypereal 1</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1M5korPp7cXvGjfKH9OA9_aDp3SO7ZnQi','VULK — Hypereal 2'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1M5korPp7cXvGjfKH9OA9_aDp3SO7ZnQi&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">VULK</div>
+        <div class="vi-title">Hypereal 2</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1A19HWZU75dPRmw0r9cHeADf6SxRkvXnu','VULK — Hypereal 3'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1A19HWZU75dPRmw0r9cHeADf6SxRkvXnu&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">VULK</div>
+        <div class="vi-title">Hypereal 3</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- BOWEN -->
+  <div class="brand-divider reveal">
+    <div class="brand-divider-name">Bowen</div>
+    <div class="brand-divider-line"></div>
+    <div class="brand-divider-tag">Calzado Femenino · Fashion · 2026</div>
+  </div>
+  <div class="vg reveal">
+    <a href="#" onclick="openVideo('1ViIiTmO_mHlTlO76Ltezj8yvKDoym9gm','Bowen — Versión Extendida'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1ViIiTmO_mHlTlO76Ltezj8yvKDoym9gm&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Bowen</div>
+        <div class="vi-title">Versión Extendida</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1fenLpCVP1tORBWCvgL3nsJRuRhPlLgjH','Bowen — Campaign Cut 3'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1fenLpCVP1tORBWCvgL3nsJRuRhPlLgjH&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Bowen</div>
+        <div class="vi-title">Campaign Cut 3</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- MARÍA CHER -->
+  <div class="brand-divider reveal">
+    <div class="brand-divider-name">María Cher</div>
+    <div class="brand-divider-line"></div>
+    <div class="brand-divider-tag">Fashion · AI Production · 2025–2026</div>
+  </div>
+  <div class="vg reveal">
+    <a href="#" onclick="openVideo('1SF_HqSAZK9OgB2V_QYL5WnAT1YOfWVNw','María Cher — IA HQ Campaign'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1SF_HqSAZK9OgB2V_QYL5WnAT1YOfWVNw&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">María Cher</div>
+        <div class="vi-title">IA HQ Campaign</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1ttuDfw5HxXgXRMLM0Hdm2jWKXS9N6Cb3','María Cher — Pajarito Campaign'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1ttuDfw5HxXgXRMLM0Hdm2jWKXS9N6Cb3&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">María Cher</div>
+        <div class="vi-title">Pajarito Campaign</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- LINEDITO -->
+  <div class="brand-divider reveal">
+    <div class="brand-divider-name">Linedito</div>
+    <div class="brand-divider-line"></div>
+    <div class="brand-divider-tag">Perfumería · Fragancias · CGI · 2025</div>
+  </div>
+  <div class="vg reveal">
+    <a href="#" onclick="openVideo('1aevHK-7r1FNY_xmnsyxr7Cucbk14N7yQ','Linedito — Dolcezza — Perfume Campaign'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1aevHK-7r1FNY_xmnsyxr7Cucbk14N7yQ&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Linedito</div>
+        <div class="vi-title">Dolcezza — Perfume Campaign</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1pe39jBFIxqt-V0-u_G2R97M7snGVJXyT','Linedito — Uomo — Perfume Campaign'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1pe39jBFIxqt-V0-u_G2R97M7snGVJXyT&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Linedito</div>
+        <div class="vi-title">Uomo — Perfume Campaign</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1HBUB-dNShS-GQ3i_C557spTqDb1FnBM0','Linedito — Margaritas'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1HBUB-dNShS-GQ3i_C557spTqDb1FnBM0&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Linedito</div>
+        <div class="vi-title">Margaritas</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- MULTI-BRAND -->
+  <div class="brand-divider reveal">
+    <div class="brand-divider-name">Multi-Brand</div>
+    <div class="brand-divider-line"></div>
+    <div class="brand-divider-tag">Pixory · 47 Street · Ossira · Pfizer · Acuario · Hush Puppies · Ricagno</div>
+  </div>
+  <div class="vg reveal">
+    <a href="#" onclick="openVideo('1i3aoJmX8UYjLff39R1q5EFQ6Aem-9I42','Pixory — Spring Series'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1i3aoJmX8UYjLff39R1q5EFQ6Aem-9I42&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Pixory</div>
+        <div class="vi-title">Spring Series</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1_Mg6qNWOPLeiJDHsLAdid2WumErnG3RO','Pixory — Winter Series'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1_Mg6qNWOPLeiJDHsLAdid2WumErnG3RO&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Pixory</div>
+        <div class="vi-title">Winter Series</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1qQmHwcCVqe7csQ7SUBonwAtcmdwL4hDp','47 Street — Conformado Final 03'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1qQmHwcCVqe7csQ7SUBonwAtcmdwL4hDp&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">47 Street</div>
+        <div class="vi-title">Conformado Final 03</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1j9uFF45Wcx6LdrMpn3gvZF9p2cVg94RT','47 Street — Conformado Final 04'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1j9uFF45Wcx6LdrMpn3gvZF9p2cVg94RT&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">47 Street</div>
+        <div class="vi-title">Conformado Final 04</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1bvZA0hcOBRmLCLuS3LRUhOox2keoWybr','Ossira — Navidad Campaign'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1bvZA0hcOBRmLCLuS3LRUhOox2keoWybr&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Ossira</div>
+        <div class="vi-title">Navidad Campaign</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1E43mtFvd15GH6B-Iy-3B1l8k3lqe0Ngb','Pfizer — Ibupirac Campaign'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1E43mtFvd15GH6B-Iy-3B1l8k3lqe0Ngb&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Pfizer</div>
+        <div class="vi-title">Ibupirac Campaign</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1fcbnFZTMHiBlgn9Pa_Dk2EOQ9I1tbzMu','Acuario — Campaign'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1fcbnFZTMHiBlgn9Pa_Dk2EOQ9I1tbzMu&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Acuario</div>
+        <div class="vi-title">Campaign</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1uRyIsVKxXbk5AMw6ult1mfkvuiYV2LS2','Hush Puppies — Campaign 1'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1uRyIsVKxXbk5AMw6ult1mfkvuiYV2LS2&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Hush Puppies</div>
+        <div class="vi-title">Campaign 1</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1eHVg39GU_AKddj1eVbjrG7Bfzb4H-G_q','Ricagno — Campaign Cut 3'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1eHVg39GU_AKddj1eVbjrG7Bfzb4H-G_q&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Ricagno</div>
+        <div class="vi-title">Campaign Cut 3</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1LfPAxZagfy3ycGtK41IeuLX-UgNOkxnB','Designers — Editorial 2'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1LfPAxZagfy3ycGtK41IeuLX-UgNOkxnB&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Designers</div>
+        <div class="vi-title">Editorial 2</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1D29D4z3Xj_M8H01y8y5-NcvEtB8SffyZ','Designers — Editorial 4'); return false;" class="vi">
+      <div class="vi-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1D29D4z3Xj_M8H01y8y5-NcvEtB8SffyZ&sz=w600')"></div>
+      <div class="vi-play">▶</div>
+      <div class="vi-info">
+        <div class="vi-brand">Designers</div>
+        <div class="vi-title">Editorial 4</div>
+        <div class="vi-arr">Ver → ↗</div>
+      </div>
+    </a>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════
+     03 — CGI
+═══════════════════════════════ -->
+<div id="cgi">
+  <div class="sh reveal">
+    <div>
+      <div class="sh-num">03 — 3D & Motion</div>
+      <h2 class="sh-title">CGI</h2>
+    </div>
+    <div class="sh-label">3D · Animation<br>Visual Effects<br>Product Worlds</div>
+  </div>
+
+  <div class="cgi-grid reveal">
+    <a href="#" onclick="openVideo('1qOfGo5d5SZpPh28cXuVf0t7ftQVPEgby','CGI — ISIMO Showreel'); return false;" class="cgi-card">
+      <div class="card-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1qOfGo5d5SZpPh28cXuVf0t7ftQVPEgby&sz=w800')"></div>
+      <span class="cpill gold">Showreel</span>
+      <div class="play-overlay"><div class="play-icon">▶</div></div>
+      <div class="ci">
+        <div class="cc">ISIMO Studio</div>
+        <div class="cn">CGI<br>Showreel</div>
+        <div class="ct">CGI · Motion · Studio</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1Nv-U8kGmaDof3j6bDVRtrTxztN56Nm5L','Milka — Snowball'); return false;" class="cgi-card">
+      <div class="card-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1Nv-U8kGmaDof3j6bDVRtrTxztN56Nm5L&sz=w800')"></div>
+      <span class="cpill">Food · Brand</span>
+      <div class="play-overlay"><div class="play-icon">▶</div></div>
+      <div class="ci">
+        <div class="cc">Milka</div>
+        <div class="cn">Snowball<br>CGI</div>
+        <div class="ct">CGI · 3D Animation · Brand</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('18uolMHydAZc1SljEhP42gffqRlrnDHv-','Multiplaza — Paraguay'); return false;" class="cgi-card">
+      <div class="card-bg" style="background-image:url('https://drive.google.com/thumbnail?id=18uolMHydAZc1SljEhP42gffqRlrnDHv-&sz=w800')"></div>
+      <div class="play-overlay"><div class="play-icon">▶</div></div>
+      <div class="ci">
+        <div class="cc">Multiplaza Paraguay</div>
+        <div class="cn">Shopping<br>CGI</div>
+        <div class="ct">CGI · Architecture · Motion</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1y_0M1mM-bd3uW8v1_iN80HgF81e9KizC','Moonshot — Ueno Bank'); return false;" class="cgi-card">
+      <div class="card-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1y_0M1mM-bd3uW8v1_iN80HgF81e9KizC&sz=w800')"></div>
+      <div class="play-overlay"><div class="play-icon">▶</div></div>
+      <div class="ci">
+        <div class="cc">Moonshot · Ueno Bank</div>
+        <div class="cn">Fintech<br>CGI</div>
+        <div class="ct">CGI · Brand · Motion</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1zH2b1LpHegbV4-wf_BxO2pYv7BHkEnEc','MINI — Screen'); return false;" class="cgi-card">
+      <div class="card-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1zH2b1LpHegbV4-wf_BxO2pYv7BHkEnEc&sz=w800')"></div>
+      <div class="play-overlay"><div class="play-icon">▶</div></div>
+      <div class="ci">
+        <div class="cc">MINI</div>
+        <div class="cn">Screen<br>CGI</div>
+        <div class="ct">Automotive · CGI · VFX</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1ENVd7tStyffHWGxw2MyYLxPsSZIMJDg8','Director\'s Cut — Conform Sound'); return false;" class="cgi-card">
+      <div class="card-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1ENVd7tStyffHWGxw2MyYLxPsSZIMJDg8&sz=w800')"></div>
+      <span class="cpill gold">Director's Cut</span>
+      <div class="play-overlay"><div class="play-icon">▶</div></div>
+      <div class="ci">
+        <div class="cc">Director's Cut</div>
+        <div class="cn">Conform<br>Sound</div>
+        <div class="ct">CGI · Full Cut · Production</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1NJ7YSKwDyRnGCfdGYa9FqBtvIIFPPJpM','El Principito y Rosa — Horizontal'); return false;" class="cgi-card">
+      <div class="card-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1NJ7YSKwDyRnGCfdGYa9FqBtvIIFPPJpM&sz=w800')"></div>
+      <span class="cpill">Colección Especial</span>
+      <div class="play-overlay"><div class="play-icon">▶</div></div>
+      <div class="ci">
+        <div class="cc">El Principito y Rosa</div>
+        <div class="cn">CGI<br>Horizontal</div>
+        <div class="ct">CGI · Fashion · Product World</div>
+      </div>
+    </a>
+    <a href="#" onclick="openVideo('1lab6UqLeHsYkJ7EmGiXmSaUVZec8p3B5','Estrellas — Vertical'); return false;" class="cgi-card">
+      <div class="card-bg" style="background-image:url('https://drive.google.com/thumbnail?id=1lab6UqLeHsYkJ7EmGiXmSaUVZec8p3B5&sz=w800')"></div>
+      <div class="play-overlay"><div class="play-icon">▶</div></div>
+      <div class="ci">
+        <div class="cc">Estrellas</div>
+        <div class="cn">CGI<br>Vertical</div>
+        <div class="ct">CGI · Motion · Visual Effects</div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     04 — FOTOGRAFÍA
+═══════════════════════════════ -->
+<div id="fotos">
+  <div class="sh reveal">
+    <div>
+      <div class="sh-num">04 — Photography</div>
+      <h2 class="sh-title">Fotografía</h2>
+    </div>
+    <div class="sh-label">Campaign · Editorial<br>AI Imagery · Product</div>
+  </div>
+
+  <!-- RICAGNO -->
+  <div class="brand-divider reveal">
+    <div class="brand-divider-name">Ricagno</div>
+    <div class="brand-divider-line"></div>
+    <div class="brand-divider-tag">Street · Night · Bistro · Icons · 2026</div>
+  </div>
+  <div class="pg reveal">
+    <a href="#" onclick="openImg('1omrlTUo5ug9lcYpONGjYnTcwb5wgomiH','Ricagno — Street 1'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1omrlTUo5ug9lcYpONGjYnTcwb5wgomiH&sz=w600" alt="Ricagno Street 1" loading="lazy">
+      <div class="pg-brand">Ricagno</div>
+      <div class="pg-label">Street 1 — Campaign</div>
+    </a>
+    <a href="#" onclick="openImg('1QJcOeQWRjT-hFdQrsRHNLiB7Jrb0-1pQ','Ricagno — Street 2'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1QJcOeQWRjT-hFdQrsRHNLiB7Jrb0-1pQ&sz=w600" alt="Ricagno Street 2" loading="lazy">
+      <div class="pg-brand">Ricagno</div>
+      <div class="pg-label">Street 2 — Campaign</div>
+    </a>
+    <a href="#" onclick="openImg('1VPePWDPJJA7U8r3B_1D0KSXdBx3roYuk','Ricagno — Street 4'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1VPePWDPJJA7U8r3B_1D0KSXdBx3roYuk&sz=w600" alt="Ricagno Street 4" loading="lazy">
+      <div class="pg-brand">Ricagno</div>
+      <div class="pg-label">Street 4 — Campaign</div>
+    </a>
+    <a href="#" onclick="openImg('1BGls1SoqMNeAunCBBOiIPtHZC7vhzP4f','Ricagno — Street 5'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1BGls1SoqMNeAunCBBOiIPtHZC7vhzP4f&sz=w600" alt="Ricagno Street 5" loading="lazy">
+      <div class="pg-brand">Ricagno</div>
+      <div class="pg-label">Street 5 — Campaign</div>
+    </a>
+    <a href="#" onclick="openImg('1HhDu6y-kXl56hQBaDGdKlBI3yYSALkyu','Ricagno — Street 10'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1HhDu6y-kXl56hQBaDGdKlBI3yYSALkyu&sz=w600" alt="Ricagno Street 10" loading="lazy">
+      <div class="pg-brand">Ricagno</div>
+      <div class="pg-label">Street 10 — Campaign</div>
+    </a>
+    <a href="#" onclick="openImg('1Mscd4aZF2wzLPS5d4Grfr_FaJ5e-74YM','Ricagno — Night 5'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1Mscd4aZF2wzLPS5d4Grfr_FaJ5e-74YM&sz=w600" alt="Ricagno Night 5" loading="lazy">
+      <div class="pg-brand">Ricagno</div>
+      <div class="pg-label">Night 5 — Campaign</div>
+    </a>
+    <a href="#" onclick="openImg('1bbsaa-H3MLfSayEDcm_le7mHqgz4cvtK','Ricagno — Night 9'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1bbsaa-H3MLfSayEDcm_le7mHqgz4cvtK&sz=w600" alt="Ricagno Night 9" loading="lazy">
+      <div class="pg-brand">Ricagno</div>
+      <div class="pg-label">Night 9 — Campaign</div>
+    </a>
+    <a href="#" onclick="openImg('1uWjQdYid2EYCtJoBkQPQ2mlAyoeje-2W','Ricagno — Bistro 3'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1uWjQdYid2EYCtJoBkQPQ2mlAyoeje-2W&sz=w600" alt="Ricagno Bistro 3" loading="lazy">
+      <div class="pg-brand">Ricagno</div>
+      <div class="pg-label">Bistro 3 — Campaign</div>
+    </a>
+    <a href="#" onclick="openImg('1pPc37NVx-KnaS5mmCddE8pxTPLv58i2r','Ricagno — Bistro 5'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1pPc37NVx-KnaS5mmCddE8pxTPLv58i2r&sz=w600" alt="Ricagno Bistro 5" loading="lazy">
+      <div class="pg-brand">Ricagno</div>
+      <div class="pg-label">Bistro 5 — Campaign</div>
+    </a>
+    <a href="#" onclick="openImg('1GmmdFXajjBiw0q0xt_YhH0n6I9r6VU1q','Ricagno — Icons 3'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1GmmdFXajjBiw0q0xt_YhH0n6I9r6VU1q&sz=w600" alt="Ricagno Icons 3" loading="lazy">
+      <div class="pg-brand">Ricagno</div>
+      <div class="pg-label">Icons 3 — Campaign</div>
+    </a>
+    <a href="#" onclick="openImg('1yvNvTFakfCdP1AcvkUQlOT6EELWtqEiu','Ricagno — Icons 9'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1yvNvTFakfCdP1AcvkUQlOT6EELWtqEiu&sz=w600" alt="Ricagno Icons 9" loading="lazy">
+      <div class="pg-brand">Ricagno</div>
+      <div class="pg-label">Icons 9 — Campaign</div>
+    </a>
+  </div>
+
+  <!-- BOWEN FOTOS -->
+  <div class="brand-divider reveal">
+    <div class="brand-divider-name">Bowen</div>
+    <div class="brand-divider-line"></div>
+    <div class="brand-divider-tag">FW · Coming Soon · Teasers · 2026</div>
+  </div>
+  <div class="pg reveal">
+    <a href="#" onclick="openImg('1rjj6sXiIIpnnEYzD6I5M4-iruv0qtvuu','Bowen — FW 2'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1rjj6sXiIIpnnEYzD6I5M4-iruv0qtvuu&sz=w600" alt="Bowen FW 2" loading="lazy">
+      <div class="pg-brand">Bowen</div>
+      <div class="pg-label">FW — Fall Winter</div>
+    </a>
+    <a href="#" onclick="openImg('1HGDalhiC4dvtNmPRnxCK1yRWv8O9Ua5h','Bowen — Coming Soon 6'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1HGDalhiC4dvtNmPRnxCK1yRWv8O9Ua5h&sz=w600" alt="Bowen Coming Soon 6" loading="lazy">
+      <div class="pg-brand">Bowen</div>
+      <div class="pg-label">Coming Soon 6</div>
+    </a>
+    <a href="#" onclick="openImg('1M9CTBMLJwgy7Kw43nFknVXiqExTPk6QC','Bowen — Coming Soon 7'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1M9CTBMLJwgy7Kw43nFknVXiqExTPk6QC&sz=w600" alt="Bowen Coming Soon 7" loading="lazy">
+      <div class="pg-brand">Bowen</div>
+      <div class="pg-label">Coming Soon 7</div>
+    </a>
+  </div>
+
+  <!-- OSSIRA FOTOS -->
+  <div class="brand-divider reveal">
+    <div class="brand-divider-name">Ossira</div>
+    <div class="brand-divider-line"></div>
+    <div class="brand-divider-tag">Fashion · Navidad · Editorial · 2025</div>
+  </div>
+  <div class="pg reveal">
+    <a href="#" onclick="openImg('1dtvwUEeCKTEmgeultdGQ9ogDBkpyxaAN','Ossira — 11665'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1dtvwUEeCKTEmgeultdGQ9ogDBkpyxaAN&sz=w600" alt="Ossira 11665" loading="lazy">
+      <div class="pg-brand">Ossira</div>
+      <div class="pg-label">Campaign Editorial</div>
+    </a>
+    <a href="#" onclick="openImg('1jiqd-oR2baeEXiH1F2S9QkEz8PoqE2-F','Ossira — 11760'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1jiqd-oR2baeEXiH1F2S9QkEz8PoqE2-F&sz=w600" alt="Ossira 11760" loading="lazy">
+      <div class="pg-brand">Ossira</div>
+      <div class="pg-label">Campaign Editorial</div>
+    </a>
+  </div>
+
+  <!-- PAULA CAHEN D'ANVERS -->
+  <div class="brand-divider reveal">
+    <div class="brand-divider-name">Paula Cahen D'Anvers</div>
+    <div class="brand-divider-line"></div>
+    <div class="brand-divider-tag">Fashion · Photography · 2025</div>
+  </div>
+  <div class="pg reveal">
+    <a href="#" onclick="openImg('1sJpiTRl2bY8FPV0BA5CtCNq0NF8hSOID','Paula Cahen D\'Anvers — 4'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1sJpiTRl2bY8FPV0BA5CtCNq0NF8hSOID&sz=w600" alt="Paula Cahen 4" loading="lazy">
+      <div class="pg-brand">Paula C.D'Anvers</div>
+      <div class="pg-label">Campaign 04</div>
+    </a>
+    <a href="#" onclick="openImg('1oHFqDpnL-_1aNPuZcindHlKgK5KonQru','Paula Cahen D\'Anvers — 5'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1oHFqDpnL-_1aNPuZcindHlKgK5KonQru&sz=w600" alt="Paula Cahen 5" loading="lazy">
+      <div class="pg-brand">Paula C.D'Anvers</div>
+      <div class="pg-label">Campaign 05</div>
+    </a>
+    <a href="#" onclick="openImg('1YrPR_Tfz8DhgSunLOD4B_WCUX94VV-Ik','Paula Cahen D\'Anvers — 7'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1YrPR_Tfz8DhgSunLOD4B_WCUX94VV-Ik&sz=w600" alt="Paula Cahen 7" loading="lazy">
+      <div class="pg-brand">Paula C.D'Anvers</div>
+      <div class="pg-label">Campaign 07</div>
+    </a>
+    <a href="#" onclick="openImg('1RmQsws2N6ene1Z2FWLf2usALEITkfdMO','Paula Cahen D\'Anvers — 8'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1RmQsws2N6ene1Z2FWLf2usALEITkfdMO&sz=w600" alt="Paula Cahen 8" loading="lazy">
+      <div class="pg-brand">Paula C.D'Anvers</div>
+      <div class="pg-label">Campaign 08</div>
+    </a>
+    <a href="#" onclick="openImg('1Bm7OhiitTua6WlIBXlA18o3azFlm0v9C','Paula Cahen D\'Anvers — 9'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1Bm7OhiitTua6WlIBXlA18o3azFlm0v9C&sz=w600" alt="Paula Cahen 9" loading="lazy">
+      <div class="pg-brand">Paula C.D'Anvers</div>
+      <div class="pg-label">Campaign 09</div>
+    </a>
+    <a href="#" onclick="openImg('1U-N64gqR-aegj_x1ghUoi3jAr4avxqaL','Paula Cahen D\'Anvers — 10'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1U-N64gqR-aegj_x1ghUoi3jAr4avxqaL&sz=w600" alt="Paula Cahen 10" loading="lazy">
+      <div class="pg-brand">Paula C.D'Anvers</div>
+      <div class="pg-label">Campaign 10</div>
+    </a>
+  </div>
+
+  <!-- JAZMIN El Principito -->
+  <div class="brand-divider reveal">
+    <div class="brand-divider-name">Caro Cuore</div>
+    <div class="brand-divider-line"></div>
+    <div class="brand-divider-tag">Colección Especial CGI · Jazmín Chebar × Caro Cuore · 2025</div>
+  </div>
+  <div class="pg reveal">
+    <a href="#" onclick="openImg('1vsWx6HqtPFmzEOyci7ByyuOTm5_7KTjM','Flor — El Principito Horizontal'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1vsWx6HqtPFmzEOyci7ByyuOTm5_7KTjM&sz=w600" alt="El Principito Horizontal" loading="lazy">
+      <div class="pg-brand">Caro Cuore</div>
+      <div class="pg-label">El Principito — Horizontal</div>
+    </a>
+    <a href="#" onclick="openImg('15ieK3eDpgvhYRVvO2ufT1EoIm7fQcgRQ','Flor — El Principito Vertical'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=15ieK3eDpgvhYRVvO2ufT1EoIm7fQcgRQ&sz=w600" alt="El Principito Vertical" loading="lazy">
+      <div class="pg-brand">Caro Cuore</div>
+      <div class="pg-label">El Principito — Vertical</div>
+    </a>
+    <a href="#" onclick="openImg('17Lxl4UlEe3UmLO3qKaJxEy5pyt17OB5S','RRSS — El Principito Horizontal'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=17Lxl4UlEe3UmLO3qKaJxEy5pyt17OB5S&sz=w600" alt="El Principito RRSS" loading="lazy">
+      <div class="pg-brand">Caro Cuore</div>
+      <div class="pg-label">El Principito — RRSS</div>
+    </a>
+  </div>
+
+  <!-- PFIZER AI -->
+  <div class="brand-divider reveal">
+    <div class="brand-divider-name">Pfizer — Ibupirac</div>
+    <div class="brand-divider-line"></div>
+    <div class="brand-divider-tag">Advertising · Pharma · AI Imagery · Verano 2025</div>
+  </div>
+  <div class="pg reveal">
+    <a href="#" onclick="openImg('1iV2krZl5dIYeaTTbQnMjW4hV99LhVhDY','Pfizer — Verano 1'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1iV2krZl5dIYeaTTbQnMjW4hV99LhVhDY&sz=w600" alt="Pfizer Verano 1" loading="lazy">
+      <div class="pg-brand">Pfizer</div>
+      <div class="pg-label">Verano — Duele el Tránsito</div>
+    </a>
+    <a href="#" onclick="openImg('1xJ5nIkAtjq3Z8CKMwunrWnVem41a1Siz','Pfizer — Verano 6'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1xJ5nIkAtjq3Z8CKMwunrWnVem41a1Siz&sz=w600" alt="Pfizer Verano 6" loading="lazy">
+      <div class="pg-brand">Pfizer</div>
+      <div class="pg-label">Verano — Dolores de Verano</div>
+    </a>
+    <a href="#" onclick="openImg('1BcHX5gr1k73neV1Ve15Mkxu2bK_I8Ozk','Pfizer — Verano 10'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1BcHX5gr1k73neV1Ve15Mkxu2bK_I8Ozk&sz=w600" alt="Pfizer Verano 10" loading="lazy">
+      <div class="pg-brand">Pfizer</div>
+      <div class="pg-label">Verano 10</div>
+    </a>
+    <a href="#" onclick="openImg('1gc8LwYuBWUF_Fx5pOhBfd0_My6-PenEx','Pfizer — Verano 11'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1gc8LwYuBWUF_Fx5pOhBfd0_My6-PenEx&sz=w600" alt="Pfizer Verano 11" loading="lazy">
+      <div class="pg-brand">Pfizer</div>
+      <div class="pg-label">Verano — Dolor de Oficina</div>
+    </a>
+    <a href="#" onclick="openImg('1sf0m-xhuKidf4cj9WyadBHrmQ2LBjwio','Pfizer — Verano 12'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1sf0m-xhuKidf4cj9WyadBHrmQ2LBjwio&sz=w600" alt="Pfizer Verano 12" loading="lazy">
+      <div class="pg-brand">Pfizer</div>
+      <div class="pg-label">Verano — Casa Limpia</div>
+    </a>
+  </div>
+
+  <!-- FLOR DE CAÑA -->
+  <div class="brand-divider reveal">
+    <div class="brand-divider-name">Flor de Caña</div>
+    <div class="brand-divider-line"></div>
+    <div class="brand-divider-tag">Bebidas · Licor · Espresso Liqueur Campaign · 2025</div>
+  </div>
+  <div class="pg reveal">
+    <a href="#" onclick="openImg('1HwL2FnuTS6MDAHMkwpJU-VR4pc231bUK','Flor de Caña — Horizontal'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1HwL2FnuTS6MDAHMkwpJU-VR4pc231bUK&sz=w600" alt="Flor de Caña" loading="lazy">
+      <div class="pg-brand">Flor de Caña</div>
+      <div class="pg-label">Espresso Liqueur — Campaign</div>
+    </a>
+  </div>
+
+  <!-- CHEEKY -->
+  <div class="brand-divider reveal">
+    <div class="brand-divider-name">Cheeky</div>
+    <div class="brand-divider-line"></div>
+    <div class="brand-divider-tag">Fashion Infantil · CGI · Fluo Campaign · 2025</div>
+  </div>
+  <div class="pg reveal">
+    <a href="#" onclick="openImg('1PiDNmOymvRNq7aZdoUdx-y4QnQb4CBDi','Cheeky — Fluo 2'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1PiDNmOymvRNq7aZdoUdx-y4QnQb4CBDi&sz=w600" alt="Cheeky Fluo 2" loading="lazy">
+      <div class="pg-brand">Cheeky</div>
+      <div class="pg-label">Fluo — Campaign 02</div>
+    </a>
+    <a href="#" onclick="openImg('1CIQag056wACnSFR7KuFLL107HFqyiJrB','Cheeky — Fluo 3'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1CIQag056wACnSFR7KuFLL107HFqyiJrB&sz=w600" alt="Cheeky Fluo 3" loading="lazy">
+      <div class="pg-brand">Cheeky</div>
+      <div class="pg-label">Fluo — Campaign 03</div>
+    </a>
+    <a href="#" onclick="openImg('1yQixLYKq5W8zHThdjd1ZAmZBo9bGgSK8','Cheeky — Fluo 4'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1yQixLYKq5W8zHThdjd1ZAmZBo9bGgSK8&sz=w600" alt="Cheeky Fluo 4" loading="lazy">
+      <div class="pg-brand">Cheeky</div>
+      <div class="pg-label">Fluo — Campaign 04</div>
+    </a>
+    <a href="#" onclick="openImg('1qiKyJbkhSyZ2CId1GkoN42JV_yj-jhLt','Cheeky — Fluo 5'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1qiKyJbkhSyZ2CId1GkoN42JV_yj-jhLt&sz=w600" alt="Cheeky Fluo 5" loading="lazy">
+      <div class="pg-brand">Cheeky</div>
+      <div class="pg-label">Fluo — Campaign 05</div>
+    </a>
+  </div>
+
+  <!-- COMPLOT -->
+  <div class="brand-divider reveal">
+    <div class="brand-divider-name">Complot</div>
+    <div class="brand-divider-line"></div>
+    <div class="brand-divider-tag">Fashion · Campaña Navidad · 2025</div>
+  </div>
+  <div class="pg reveal">
+    <a href="#" onclick="openImg('1Z5vIqcsOQt2XxIjujyWb5dPveRGMYNlq','Complot — Navidad'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1Z5vIqcsOQt2XxIjujyWb5dPveRGMYNlq&sz=w600" alt="Complot Navidad" loading="lazy">
+      <div class="pg-brand">Complot</div>
+      <div class="pg-label">Navidad — Campaign</div>
+    </a>
+    <a href="#" onclick="openImg('1TlmcEtAUrJSktDHdAi37GNIhGUwNDGLF','Complot — Moto'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1TlmcEtAUrJSktDHdAi37GNIhGUwNDGLF&sz=w600" alt="Complot Moto" loading="lazy">
+      <div class="pg-brand">Complot</div>
+      <div class="pg-label">Moto — Campaign</div>
+    </a>
+    <a href="#" onclick="openImg('1cz6ah4YBbto0x3OI9VHIz3q5OA1gyRWM','Complot — 9 de Julio'); return false;">
+      <img src="https://drive.google.com/thumbnail?id=1cz6ah4YBbto0x3OI9VHIz3q5OA1gyRWM&sz=w600" alt="Complot 9 de Julio" loading="lazy">
+      <div class="pg-brand">Complot</div>
+      <div class="pg-label">9 de Julio — Campaign</div>
+    </a>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════
+     05 — ABOUT
+═══════════════════════════════ -->
+<div id="about">
+  <div class="sh reveal">
+    <div>
+      <div class="sh-num">05 — Studio</div>
+      <h2 class="sh-title">About</h2>
+    </div>
+    <div class="sh-label">Buenos Aires<br>Worldwide</div>
+  </div>
+
+  <div class="ab reveal">
+    <div>
+      <div class="ab-stmt">We build<br><em>visual systems</em><br>that make brands<br>unforgettable.</div>
+      <p class="ab-body">
+        ISIMO is a creative agency and production studio based in Buenos Aires, operating globally. We specialize in AI imagery, CGI, 3D animation, campaign production, and branding for fashion, beauty, music, and advertising brands.<br><br>
+        From concept to final form.
+      </p>
+    </div>
+    <ul class="svl">
+      <li>Campaign Production <span>Fashion · Beauty · Advertising</span></li>
+      <li>AI Imagery <span>Editorial · Product · e-Shop</span></li>
+      <li>CGI &amp; 3D Motion <span>Product Worlds · VFX</span></li>
+      <li>Virtual Talent <span>Digital Models · Art Direction</span></li>
+      <li>Branding <span>Identity · Brand Systems</span></li>
+      <li>Social Media <span>Content · Strategy · Ads</span></li>
+      <li>Web Design <span>Landing · E-commerce</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="fl">ISIMO</div>
+  <div class="fr">
+    <div class="fr-lbl">Contact</div>
+    <a href="mailto:contacto@isimo.us">contacto@isimo.us</a>
+    <a href="https://www.instagram.com/isimo.co" target="_blank">@isimo.co</a>
+  </div>
+  <div class="fb">
+    <span>© 2026 ISIMO — Creative Agency &amp; Production Studio</span>
+    <span>Buenos Aires · Worldwide</span>
+  </div>
+</footer>
+
+<script>
+  // cursor
+  const c=document.getElementById('cur'), c2=document.getElementById('cur2');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{
+    mx=e.clientX;my=e.clientY;
+    c.style.left=mx+'px';c.style.top=my+'px';
+  });
+  (function t(){rx+=(mx-rx)*.13;ry+=(my-ry)*.13;c2.style.left=rx+'px';c2.style.top=ry+'px';requestAnimationFrame(t)})();
+
+  // nav scroll
+  window.addEventListener('scroll',()=>{
+    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // reveal on scroll
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach((e,i)=>{
+      if(e.isIntersecting){setTimeout(()=>e.target.classList.add('in'),i*50);io.unobserve(e.target);}
+    });
+  },{threshold:.06});
+  document.querySelectorAll('.reveal').forEach(r=>io.observe(r));
+
+  // LIGHTBOX
+  const lb = document.getElementById('lb');
+  const lbInner = document.getElementById('lb-inner');
+  const lbCaption = document.getElementById('lb-caption');
+
+  function openVideo(id, title) {
+    lbInner.innerHTML = `
+      <div style="position:relative;width:min(90vw,1100px);aspect-ratio:16/9;background:#000;">
+        <iframe 
+          src="https://drive.google.com/file/d/${id}/preview"
+          style="width:100%;height:100%;border:none;display:block;"
+          allow="autoplay"
+          allowfullscreen>
+        </iframe>
+      </div>`;
+    lbCaption.textContent = title;
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    return false;
+  }
+
+  function openImg(id, title) {
+    lbInner.innerHTML = `<img src="https://drive.google.com/thumbnail?id=${id}&sz=w1200" alt="${title}" 
+      onerror="this.src='https://drive.google.com/uc?id=${id}'">`;
+    lbCaption.textContent = title;
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    return false;
+  }
+
+  function closeLB() {
+    lb.classList.remove('open');
+    lbInner.innerHTML = '';
+    document.body.style.overflow = '';
+  }
+
+  lb.addEventListener('click', e => {
+    if (e.target === lb) closeLB();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLB();
+  });
+</script>
+</body>
+</html>
